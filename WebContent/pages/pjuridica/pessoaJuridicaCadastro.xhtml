@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="pjacao" value="#{pessoaJuridicaBean.acao}" />
+			<f:viewParam name="pjId" value="#{pessoaJuridicaBean.codigo}" />
+
+			<f:event listener="#{pessoaJuridicaBean.carregarDados}"
+				type="preRenderView" />
+
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formCadPessoaJuridica">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Pessoas Jurídicas" />
+				</f:facet>
+			</p:toolbar>
+
+
+			<h:panelGrid id="pnlPessoaDados" columns="2">
+				<p:outputLabel value="Razão Social:" />
+				<p:inputText maxlength="50" size="50"
+					value="#{pessoaJuridicaBean.pessoaJuridicaCadastro.razaoSocial}"
+					readonly="#{pessoaJuridicaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="CNPJ:" />
+				<p:inputMask mask="99.999.999/9999-99" size="18"
+					value="#{pessoaJuridicaBean.pessoaJuridicaCadastro.cnpj}"
+					readonly="#{pessoaJuridicaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputMask>
+
+				<p:outputLabel value="Suframa:" />
+				<p:inputText maxlength="9" size="9"
+					value="#{pessoaJuridicaBean.pessoaJuridicaCadastro.suframa}"
+					readonly="#{pessoaJuridicaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Inscrição Estadual:" />
+				<p:inputText maxlength="15" size="10"
+					value="#{pessoaJuridicaBean.pessoaJuridicaCadastro.inscricaoEstadual}"
+					readonly="#{pessoaJuridicaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Telefone:" />
+				<p:inputMask mask="(99)9999-9999" size="13"
+					value="#{pessoaJuridicaBean.pessoaJuridicaCadastro.telefone}"
+					readonly="#{pessoaFisicaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputMask>
+
+				<p:outputLabel value="Celular:" />
+				<p:inputMask mask="(99)9999-9999" size="13"
+					value="#{pessoaJuridicaBean.pessoaJuridicaCadastro.celular}"
+					readonly="#{pessoaFisicaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputMask>
+
+				<p:outputLabel value="Email:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{pessoaJuridicaBean.pessoaJuridicaCadastro.email}"
+					readonly="#{pessoaJuridicaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Observação:" />
+				<p:inputTextarea rows="3" cols="33" queryDelay="750"
+					minQueryLength="4"
+					value="#{pessoaJuridicaBean.pessoaJuridicaCadastro.observacao}"
+					readonly="#{pessoaJuridicaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputTextarea>
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Novo" icon="ui-icon-plus"
+					actionListener="#{pessoaJuridicaBean.novo}"
+					update=":formCadPessoaJuridica:pnlPessoaDados"
+					rendered="#{pessoaJuridicaBean.acao == 'novo'}" />
+				<p:commandButton value="Salvar" icon="ui-icon-disk"
+					actionListener="#{pessoaJuridicaBean.salvar}"
+					update=":msgGlobal :formCadPessoaJuridica:pnlPessoaDados"
+					rendered="#{pessoaJuridicaBean.acao == 'novo'}" />
+				<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+					outcome="/pages/pjuridica/pessoaJuridicaPesquisa.xhtml?faces-redirect=true" />
+				<p:commandButton value="Editar" icon="ui-icon-pencil"
+					actionListener="#{pessoaJuridicaBean.editar}" update=":msgGlobal"
+					rendered="#{pessoaJuridicaBean.acao == 'editar'}" />
+				<p:commandButton value="Excluir" icon="ui-icon-close"
+					actionListener="#{pessoaJuridicaBean.excluir}" update=":msgGlobal"
+					rendered="#{pessoaJuridicaBean.acao == 'excluir'}" />
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

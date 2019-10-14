@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:insert name="metadata" />
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>PROGER</title>
+	<h:outputStylesheet library="css" name="estilos.css" />
+	<h:outputScript library="js" name="locale-primefaces.js" />
+	<h:outputScript library="js" name="primefaces.js" />
+
+</h:head>
+<h:body>
+	<!-- Mensagem Geral -->
+	<p:growl id="msgGlobal" sticky="true" />
+
+	<p:layout fullPage="true">
+		<!-- topo -->
+		<p:layoutUnit size="110" position="north" resizable="false"
+			collapsible="false" closable="false">
+			<p:graphicImage value="/resources/images/logo_proger2.png"
+				height="98%" width="30%" style="text-align: left;" />
+
+			<h:panelGrid columns="2" height="98%" width="50%"
+				style="text-align: right;">
+
+				<p:graphicImage value="/resources/images/usuario.png" height="90%"
+					width="5%"></p:graphicImage>
+				<p:outputLabel
+					value="olá #{autenticacaoBean.funcionarioLogado.login}"></p:outputLabel>
+			</h:panelGrid>
+
+		</p:layoutUnit>
+
+		<!-- rodapé -->
+		<p:layoutUnit
+			header="Desenvolvido pela Gerência de T.I. da PMPatos com parceria da SSTechSolutions"
+			position="south" resizable="false" collapsible="false"
+			closable="false">
+		</p:layoutUnit>
+
+		<!-- menu -->
+		<p:layoutUnit size="200" position="west" resizable="false"
+			collapsible="false" closable="false">
+			<h:form id="formPrincipal">
+
+				<p:panelMenu id="pnlMenuPrincipal">
+					<p:submenu label="Sistema">
+						<p:menuitem value="Autenticação"
+							outcome="/pages/autenticacao.xhtml"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == null}" />
+						<p:menuitem value="Principal" outcome="/pages/principal.xhtml"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao != null}" />
+						<p:menuitem value="Sair"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao != null}"
+							action="#{autenticacaoBean.sair}" />
+					</p:submenu>
+
+					<p:submenu label="Cadastros"
+						rendered="#{autenticacaoBean.funcionarioLogado.funcao != null}">
+						<p:menuitem value="Endereço"
+							outcome="/pages/endereco/enderecoPesquisa.xhtml" />
+
+						<p:menuitem value="Profissão"
+							outcome="/pages/profissao/profissaoPesquisa.xhtml" />
+
+						<p:menuitem value="Profissional"
+							outcome="/pages/pfisica/pessoaFisicaPesquisa.xhtml" />
+
+						<p:menuitem value="Pessoa Jurídica"
+							outcome="/pages/pjuridica/pessoaJuridicaPesquisa.xhtml" />
+
+						<p:menuitem value="Órgão"
+							outcome="/pages/orgao/orgaoPesquisa.xhtml" />
+
+						<p:menuitem value="Funcionário"
+							outcome="/pages/funcionario/funcionarioPesquisa.xhtml" />
+
+						<p:menuitem value="Atividade"
+							outcome="/pages/atividade/atividadePesquisa.xhtml" />
+
+					</p:submenu>
+
+					<p:submenu label="Ação"
+						rendered="#{autenticacaoBean.funcionarioLogado.funcao != null}">
+						<p:menuitem value="Nova" outcome="/pages/acao/acaoPesquisa.xhtml" />
+
+					</p:submenu>
+
+
+				</p:panelMenu>
+			</h:form>
+		</p:layoutUnit>
+
+		<!-- área de Trabalho -->
+		<p:layoutUnit position="center" resizable="false" collapsible="false"
+			closable="false">
+			<ui:insert name="conteudo" />
+		</p:layoutUnit>
+	</p:layout>
+</h:body>
+</html>

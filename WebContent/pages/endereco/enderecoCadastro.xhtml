@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="endacao" value="#{enderecoBean.acao}" />
+			<f:viewParam name="endId" value="#{enderecoBean.codigo}" />
+
+			<f:event listener="#{enderecoBean.carregarDados}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="formCadEndereco">
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Endereços" />
+				</f:facet>
+			</p:toolbar>
+
+			<h:panelGrid id="pnlEnderecoDados" columns="2">
+				<p:outputLabel value="Rua:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{enderecoBean.enderecoCadastro.logradouro}"
+					readonly="#{enderecoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Número:" />
+				<p:inputText maxlength="30" size="30"
+					value="#{enderecoBean.enderecoCadastro.numero}"
+					readonly="#{enderecoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Bairro:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{enderecoBean.enderecoCadastro.bairro}"
+					readonly="#{enderecoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="CEP:" />
+				<p:inputMask mask="99999-999" size="10"
+					value="#{enderecoBean.enderecoCadastro.cep}"
+					readonly="#{enderecoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputMask>
+
+				<p:outputLabel value="Cidade:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{enderecoBean.enderecoCadastro.cidade}"
+					readonly="#{enderecoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Estado:" />
+				<p:inputText maxlength="30" size="30"
+					value="#{enderecoBean.enderecoCadastro.estado}"
+					readonly="#{enderecoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Novo" icon="ui-icon-plus"
+					actionListener="#{enderecoBean.novo}"
+					update=":formCadEndereco:pnlEnderecoDados"
+					rendered="#{enderecoBean.acao == 'novo'}" />
+				<p:commandButton value="Salvar" icon="ui-icon-disk"
+					actionListener="#{enderecoBean.salvar}"
+					update=":msgGlobal :formCadEndereco:pnlEnderecoDados"
+					rendered="#{enderecoBean.acao == 'novo'}" />
+				<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+					outcome="/pages/endereco/enderecoPesquisa.xhtml?faces-redirect=true" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{enderecoBean.editar}" update=":msgGlobal"
+					rendered="#{enderecoBean.acao == 'editar'}" />
+				<p:commandButton value="Excluir" icon="ui-icon-close"
+					actionListener="#{enderecoBean.excluir}" update=":msgGlobal"
+					rendered="#{enderecoBean.acao == 'excluir'}" />
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

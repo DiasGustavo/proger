@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="atvacao" value="#{atividadeBean.acao}" />
+			<f:viewParam name="atvId" value="#{atividadeBean.codigo}" />
+
+			<f:event listener="#{atividadeBean.carregarDados}"
+				type="preRenderView" />
+
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formCadAtividade">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Atividade" />
+				</f:facet>
+			</p:toolbar>
+
+
+			<h:panelGrid id="pnlAtividadeDados" columns="2">
+				<p:outputLabel value="Descrição:" />
+				<p:inputTextarea rows="3" cols="33" queryDelay="750"
+					minQueryLength="4"
+					value="#{atividadeBean.atividadeCadastro.descricao}"
+					readonly="#{atividadeBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputTextarea>
+
+				<h:outputLabel value="Data Início: " />
+				<p:calendar id="dt_inicio"
+					value="#{atividadeBean.atividadeCadastro.dataInicio}"
+					pattern="dd/MM/yyyy" mask="true" mode="popup"
+					readonlyInput="#{atividadeBean.acao == 'excluir'}" locale="pt"
+					timeZone="GMT-3">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+					<f:validateBean />
+				</p:calendar>
+
+				<h:outputLabel value="Data Fim: " />
+				<p:calendar id="dt_fim"
+					value="#{atividadeBean.atividadeCadastro.dataFim}"
+					pattern="dd/MM/yyyy" mask="true" mode="popup"
+					readonlyInput="#{atividadeBean.acao == 'excluir'}" locale="pt"
+					timeZone="GMT-3">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+					<f:validateBean />
+				</p:calendar>
+
+				<p:outputLabel value="Status: " />
+				<p:selectOneMenu id="listaStatus"
+					value="#{atividadeBean.atividadeCadastro.status}">
+					<f:selectItem itemValue="pendente" itemLabel="Pendente" />
+					<f:selectItem itemValue="realizada" itemLabel="Realizada" />					
+					<f:validateBean />
+				</p:selectOneMenu>				
+				
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Novo" icon="ui-icon-plus"
+					actionListener="#{atividadeBean.novo}"
+					update=":formCadAtividade"
+					rendered="#{atividadeBean.acao == 'novo'}" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{atividadeBean.salvar}"
+					update=":msgGlobal :formCadAtividade :formCadAtividade:pnlAtividadeDados"
+					rendered="#{atividadeBean.acao == 'novo'}" />
+				<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+					outcome="/pages/atividade/atividadePesquisa.xhtml?faces-redirect=true" />
+				<p:commandButton value="Gravar" icon="ui-icon-pencil"
+					actionListener="#{atividadeBean.editar}" update=":msgGlobal"
+					rendered="#{atividadeBean.acao == 'editar'}" />
+				<p:commandButton value="Excluir" icon="ui-icon-close"
+					actionListener="#{atividadeBean.excluir}" update=":msgGlobal"
+					rendered="#{atividadeBean.acao == 'excluir'}" />
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

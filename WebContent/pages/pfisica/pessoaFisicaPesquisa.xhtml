@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{pessoaFisicaBean.listar}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Pesquisa Cliente" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable emptyMessage="Nenhum registro encontrado."
+				value="#{pessoaFisicaBean.listaPessoasFisicas}"
+				filteredValue="#{pessoaFisicaBean.listaPessoasFisicasFiltradas}"
+				var="pfisica" rows="10" paginator="true">
+				<f:facet name="footer">
+					<p:button value="Novo" icon="ui-icon-plus"
+						outcome="/pages/pfisica/pessoaFisicaCadastro.xhtml?faces-redirect=true">
+						<f:param name="pfacao" value="novo" />
+					</p:button>
+				</f:facet>
+				<p:column headerText="Código" filterBy="#{pfisica.id}"
+					sortBy="#{pfisica.id}"
+					filterStyle="max-width: 90%; min-width: 90%;"
+					style="width: 12%; text-align: center;">
+					<h:outputText value="#{pfisica.id}" />
+				</p:column>
+
+				<p:column headerText="Nome" filterBy="#{pessoa.pessoa.nome}"
+					filterStyle="max-width: 90%; min-width: 90%;">
+					<h:outputText value="#{pfisica.nome}" />
+				</p:column>
+
+				<p:column headerText="CPF" filterBy="#{pessoa.cpf}"
+					filterStyle="max-width: 90%; min-width: 90%;"
+					style="width: 15%; text-align: center;">
+					<h:outputText value="#{pfisica.cpf}" />
+				</p:column>
+
+				<p:column headerText="Opções"
+					style="width: 25%; text-align: center;">
+					<p:button value="Editar" icon="ui-icon-pencil"
+						outcome="/pages/pfisica/pessoaFisicaCadastro.xhtml?faces-redirect=true">
+						<f:param name="pfId" value="#{pfisica.id}" />
+						<f:param name="pfacao" value="editar" />
+					</p:button>
+					<p:button value="Excluir" icon="ui-icon-close"
+						outcome="/pages/pfisica/pessoaFisicaCadastro.xhtml?faces-redirect=true">
+						<f:param name="pfId" value="#{pfisica.id}" />
+						<f:param name="pfacao" value="excluir" />
+					</p:button>
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

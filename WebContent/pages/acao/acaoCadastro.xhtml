@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="acaacao" value="#{acaoBean.acao}" />
+			<f:viewParam name="acaId" value="#{acaoBean.codigo}" />
+
+			<f:event listener="#{acaoBean.carregarDados}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formCadAcao">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Ação" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:tabView id="tabInformacoes">
+				<p:tab title="Dados Fundamentais">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Título:" />
+						<p:inputText maxlength="100" size="100"
+							value="#{acaoBean.acaoCadastro.titulo}"
+							readonly="#{acaoBean.acao == 'excluir'}">
+							<f:validateBean />
+						</p:inputText>
+
+						<p:outputLabel value="Objetivos Des. Sustentável: " />
+						<p:selectOneMenu id="listaObjetivosSustentaveis"
+							value="#{acaoBean.acaoCadastro.objetivoAtuacao}">
+							<f:selectItem itemValue="" itemLabel="Selecione o objetivo" />
+							<f:selectItem itemValue="erradicação da pobreza"
+								itemLabel="erradicação da pobreza" />
+							<f:selectItem itemValue="erradicação da fome"
+								itemLabel="erradicação da fome" />
+							<f:selectItem itemValue="saúde de qualidade"
+								itemLabel="saúde de qualidade" />
+							<f:selectItem itemValue="educação de qualidade"
+								itemLabel="educação de qualidade" />
+							<f:selectItem itemValue="igualdade de gênero"
+								itemLabel="igualdade de gênero" />
+							<f:selectItem itemValue="água limpa e saneamento básico"
+								itemLabel="água limpa e saneamento básico" />
+							<f:selectItem itemValue="energias renováveis"
+								itemLabel="energias renováveis" />
+							<f:selectItem itemValue="empregos dignos e crescimento econômico"
+								itemLabel="empregos dignos e crescimento econômico" />
+							<f:selectItem itemValue="inovação e infraestretura"
+								itemLabel="inovação e infraestrutura" />
+							<f:selectItem itemValue="redução das desigualdades"
+								itemLabel="redução das desigualdades" />
+							<f:selectItem itemValue="cidades e comunidades sustentávies"
+								itemLabel="cidades e comunidades sustentáveis" />
+							<f:selectItem itemValue="consumo responsável"
+								itemLabel="consumo responsável" />
+							<f:selectItem itemValue="combate as mudanças climáticas"
+								itemLabel="combate as mudanças climáticas" />
+							<f:selectItem itemValue="vida debaixo da água"
+								itemLabel="vida debaixo da água" />
+							<f:selectItem itemValue="vida sobre a Terra"
+								itemLabel="vida sobre a Terra" />
+							<f:selectItem itemValue="paz e justiça" itemLabel="paz e justiça" />
+							<f:selectItem itemValue="parceiras pelas metas"
+								itemLabel="parcerias pelas metas" />
+							<f:validateBean />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Objetivos:" />
+						<p:editor id="Objetivos"
+							value="#{acaoBean.acaoCadastro.objetivos}" height="150"
+							style="margin-bottom:10px">
+						</p:editor>
+
+						<h:outputText value="Data de Cadastro: "
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao != 'administrador'}" />
+						<h:outputText value="#{acaoBean.acaoCadastro.dataCadastro}"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao != 'administrador'}">
+							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt"
+								timeZone="GMT-3" />
+						</h:outputText>
+
+						<h:outputText value="Data de Cadastro: "
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}" />
+						<p:calendar id="dt_entrada"
+							value="#{acaoBean.acaoCadastro.dataCadastro}"
+							pattern="dd/MM/yyyy" mask="true" mode="popup"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}"
+							readonlyInput="#{acaoBean.acao == 'excluir'}" locale="pt"
+							timeZone="GMT-3">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+							<f:validateBean />
+						</p:calendar>
+
+						<h:outputLabel value="Data de Realização: " />
+						<p:calendar id="dt_realizacao"
+							value="#{acaoBean.acaoCadastro.dataRealizacao}"
+							pattern="dd/MM/yyyy" mask="true" mode="popup"
+							readonlyInput="#{acaoBean.acao == 'excluir'}" locale="pt"
+							timeZone="GMT-3">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+							<f:validateBean />
+						</p:calendar>
+
+						<p:outputLabel value="Arquivo: " for="fileUpload" />
+						<p:fileUpload id="fileUpload"
+							fileUploadListener="#{acaoBean.upload}"
+							allowTypes="/(\.|\/)(pdf)$/"
+							invalidFileMessage="São permitidas somente pdf" fileLimit="5"
+							fileLimitMessage="Só é possível escolher 5 arquivos por vez."
+							multiple="true" sequential="true"
+							onstart="console.log('Iniciando envio de arquivo')"
+							onerror="console.log('Erro na requisição de envio')"
+							oncomplete="console.log('Envio concluído')" label="Escolher"
+							uploadLabel="Enviar" cancelLabel="Cancelar"
+							style="width: 70%; text-align: center;">
+
+						</p:fileUpload>
+
+						<p:outputLabel value="Arquivo: " for="fileUpload"
+							rendered="#{acaoBean.acao == 'editar'}" />
+
+						<p:dataTable id="tblArquivos"
+							emptyMessage="Nenhum registro encontrado."
+							value="#{acaoBean.arquivos}" var="arquivo" rows="5"
+							paginator="true" rendered="#{acaoBean.acao == 'editar'}"
+							style="width: 70%; text-align: center;">
+							<p:column headerText="Nome">
+								<h:outputText value="#{arquivo.nome}" />
+							</p:column>
+
+							<p:column headerText="Opções" style="width: 30%;">
+								<p:commandButton value="Visualizar" ajax="false"
+									actionListener="#{acaoBean.visualizarArquivo(arquivo)}"
+									icon="ui-icon-arrowthick-1-s">
+									<p:fileDownload value="#{acaoBean.arquivoVisualizar}" />
+								</p:commandButton>
+
+								<p:commandButton value="Remover"
+									actionListener="#{acaoBean.removerArquivo(arquivo)}" ajax="false"
+									update="@all">
+								</p:commandButton>
+							</p:column>
+
+						</p:dataTable>
+
+
+						<p:outputLabel value="Órgão: " />
+						<p:outputLabel value="#{acaoBean.acaoCadastro.orgao.nome}" />
+						<p:outputLabel value="Usuário: " />
+						<p:outputLabel value="#{acaoBean.acaoCadastro.funcionario.login}" />
+
+					</h:panelGrid>
+				</p:tab>
+				<p:tab id="tabAtividade" title="Atividades">
+					<h:panelGrid id="pnlAtividades" columns="1" cellpadding="1">
+						<p:commandButton value="Atividades" icon="ui-icon-circle-plus"
+							style="margin-top: 1%" oncomplete="PF ('DlgAtividade').show();" />
+
+						<p:dataTable id="tblAtividades"
+							emptyMessage="Nenhum registro encontrado."
+							value="#{acaoBean.atividades}" var="atividade" rows="5"
+							paginator="true" editable="true">
+
+							<p:ajax event="rowEdit"
+								listener="#{acaoBean.editarAtividades(atividade)}"
+								update=":formCadAcao:tabInformacoes:tblAtividades"
+								process="@this" />
+
+							<p:column headerText="ID">
+								<h:outputText value="#{atividade.id}" />
+							</p:column>
+
+							<p:column id="descricao" headerText="Descriacao">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{atividade.descricao}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText value="#{atividade.descricao}" style="width:96%"
+											label="descrição" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="Data início">
+
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{atividade.dataInicio}">
+											<f:convertDateTime pattern="dd/MM/yyyy" locale="pt"
+												timeZone="GMT-3" />
+										</h:outputText>
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar id="dt_inicio" value="#{atividade.dataInicio}"
+											pattern="dd/MM/yyyy" mask="true" mode="popup" locale="pt"
+											timeZone="GMT-3">
+											<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+											<f:validateBean />
+										</p:calendar>
+									</f:facet>
+								</p:cellEditor>
+
+							</p:column>
+
+							<p:column headerText="Data Fim">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{atividade.dataFim}">
+											<f:convertDateTime pattern="dd/MM/yyyy" locale="pt"
+												timeZone="GMT-3" />
+										</h:outputText>
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar id="dt_fim" value="#{atividade.dataFim}"
+											pattern="dd/MM/yyyy" mask="true" mode="popup" locale="pt"
+											timeZone="GMT-3">
+											<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+											<f:validateBean />
+										</p:calendar>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="Status">
+
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{atividade.status}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu id="listaStatus" value="#{atividade.status}">
+											<f:selectItem itemValue="Pendente" itemLabel="Pendente" />
+											<f:selectItem itemValue="Realizada" itemLabel="Realizada" />
+											<f:validateBean />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column style="width:32px"
+								rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}">
+								<p:rowEditor />
+							</p:column>
+
+
+
+						</p:dataTable>
+
+					</h:panelGrid>
+
+				</p:tab>
+				<p:tab title="Orçamento" rendered="#{acaoBean.acaoCadastro.id > 0}">
+					<h:panelGrid columns="2" cellpadding="1">
+
+					</h:panelGrid>
+				</p:tab>
+
+				<p:tab title="Avaliação"
+					rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}">
+					<h:panelGrid columns="2" cellpadding="10">
+						<p:outputLabel value="Avaliação: "
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}" />
+						<p:selectOneMenu id="listaavaliacao"
+							value="#{acaoBean.acaoCadastro.avaliacao}"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}">
+							<f:selectItem itemValue="" itemLabel="Selecione a Avaliação" />
+							<f:selectItem itemValue="excelente" itemLabel="Excelente" />
+							<f:selectItem itemValue="bom" itemLabel="Bom" />
+							<f:selectItem itemValue="regular" itemLabel="Regular" />
+							<f:selectItem itemValue="pendente" itemLabel="Pendente" />
+							<f:validateBean />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Observação:" />
+						<p:inputTextarea class="textarea" maxlength="1024"
+							value="#{acaoBean.acaoCadastro.observacao}"
+							readonly="#{acaoBean.acao == 'excluir'}">
+							<f:validateBean />
+						</p:inputTextarea>
+
+					</h:panelGrid>
+				</p:tab>
+			</p:tabView>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Novo" icon="ui-icon-plus"
+					actionListener="#{acaoBean.novo}" update=":formCadAcao"
+					rendered="#{acaoBean.acao == 'novo'}" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{acaoBean.salvar}"
+					update=":msgGlobal :formCadAcao"
+					rendered="#{acaoBean.acao == 'novo'}" />
+				<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+					outcome="/pages/acao/acaoPesquisa.xhtml?faces-redirect=true" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{acaoBean.editar}" update=":msgGlobal"
+					rendered="#{acaoBean.acao == 'editar'}" />
+				<p:commandButton value="Excluir" icon="ui-icon-close"
+					oncomplete="PF('confirmacaoExcluir').show();"
+					rendered="#{acaoBean.acao == 'excluir'}" />
+			</h:panelGrid>
+		</h:form>
+
+
+
+		<!-- FORMULÁRIO PARA ATIVIDADE -->
+		<p:dialog closable="true" draggable="true" modal="true"
+			resizable="false" header="Atividade" widgetVar="DlgAtividade"
+			appendTo="@(body)" height="400px" width="700px">
+
+			<h:form id="formCadAtividadeTemp">
+
+				<h:panelGrid id="pnlAtividadeDados" columns="2">
+
+					<p:outputLabel value="Descrição:" />
+					<p:inputTextarea rows="5" cols="75" queryDelay="750"
+						minQueryLength="4" value="#{acaoBean.atividade.descricao}">
+						<f:validateBean />
+					</p:inputTextarea>
+
+					<h:outputLabel value="Data Início: " />
+					<p:calendar id="dt_inicio" value="#{acaoBean.atividade.dataInicio}"
+						pattern="dd/MM/yyyy" mask="true" mode="popup" locale="pt"
+						timeZone="GMT-3">
+						<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+						<f:validateBean />
+					</p:calendar>
+
+					<h:outputLabel value="Data Fim: " />
+					<p:calendar id="dt_fim" value="#{acaoBean.atividade.dataFim}"
+						pattern="dd/MM/yyyy" mask="true" mode="popup" locale="pt"
+						timeZone="GMT-3">
+						<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+						<f:validateBean />
+					</p:calendar>
+
+					<p:outputLabel value="Status: " />
+					<p:selectOneMenu id="listaStatus"
+						value="#{acaoBean.atividade.status}">
+						<f:selectItem itemValue="Pendente" itemLabel="Pendente" />
+						<f:selectItem itemValue="Realizada" itemLabel="Realizada" />
+						<f:validateBean />
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Adicionar"
+						actionListener="#{acaoBean.adicionarAtividades()}" process="@all"
+						update=":msgGlobal :formCadAcao:tabInformacoes:tblAtividades" />
+
+					<p:commandButton value="Voltar"
+						onclick="PF('DlgAtividade').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<!-- MENSAGEM PARA CONFIRMAÇÃO DE EXCLUSÃO -->
+		<p:confirmDialog id="confirmacaoDialogExcluir" appendTo="@(body)"
+			message="Tem certeza que deseja EXCLUIR esta Ação?"
+			header="Confirmação" severity="alert" widgetVar="confirmacaoExcluir">
+			<p:commandButton id="btnConfirmExcluir" value="Sim"
+				oncomplete="PF('confirmacaoExcluir').hide()"
+				icon="ui-icon-circle-check" action="#{acaoBean.excluir}"
+				update=":msgGlobal" />
+			<p:commandButton id="btnDeclineExcluir" value="Cancelar"
+				onclick="PF('confirmacaoExcluir').hide()" type="button"
+				icon="ui-icon-cancel" />
+		</p:confirmDialog>
+	</ui:define>
+
+</ui:composition>
+
+</html>
